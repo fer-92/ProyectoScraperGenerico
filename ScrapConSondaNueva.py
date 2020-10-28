@@ -575,14 +575,15 @@ def verifico_cambios_en_la_sonda():
     }
     dict1 = {}
     # = requests.get(url, headers=headers).text
-    datos_sonda_temp = requests.get(url, headers=headers)
-    datos_sonda_temp = ast.literal_eval(datos_sonda_temp.content.decode('utf-8'))
-    datos_sonda_temp = {
-        "-474068207": ("sb_023_Jujuy", ["jujuy,bolsa"], ["Jujuy", "Chaco"])
-    }
+    datos_sonda_temp2 = requests.get(url2, headers=headers).json()
+    #datos_sonda_temp = requests.get(url, headers=headers)
+    #datos_sonda_temp = ast.literal_eval(datos_sonda_temp.content.decode('utf-8'))
+    #datos_sonda_temp = {
+     #   "-474068207": ("sb_023_Jujuy", ["jujuy,bolsa"], ["Jujuy", "Chaco"])
+    #}
     global datos_sonda
-    if datos_sonda != datos_sonda_temp:
-        datos_sonda = datos_sonda_temp
+    if datos_sonda != datos_sonda_temp2["result"]:
+        datos_sonda = datos_sonda_temp2["result"]
 if __name__ == '__main__':
 
     # tomo el primer parámetro que se le pasa al scrip cuando se ejecuta

@@ -1,7 +1,7 @@
 from textblob import TextBlob
 from elastic import els
 from mi_time import mi_time
-from translators import translator
+#from translators import translator
 import random
 import datetime
 from datetime import datetime
@@ -40,9 +40,9 @@ def sentimiento(texto):
     text = TextBlob( t )
     #text_traducido = str(text.translate( to='en' ))
 
-    text_traducido = translator.translate( t )
+    #text_traducido = translator.translate( t )
 
-    analysis = TextBlob( (text_traducido) )
+    analysis = TextBlob( (text) )
     #analysis = TextBlob( tweet )
 
     analysis = analysis.sentiment

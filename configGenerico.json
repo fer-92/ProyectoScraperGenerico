@@ -81,6 +81,7 @@
             "BeautifulSoup(response, \"html.parser\").find_all(\"div\", {\"class\":'nota_z2_modulo'})",
             "BeautifulSoup(response, \"html.parser\").find_all(\"div\", {\"class\":\"mg-sec-top-post\"})",
             "BeautifulSoup(response, \"html.parser\").find_all(\"div\", {\"class\":\"side-item-text\"})",
+            "BeautifulSoup(response, \"html.parser\").find_all(\"div\", {\"class\":\"nv-single-post\"})",
             "BeautifulSoup(response, \"html.parser\").find_all(\"div\", {\"class\":\"nv-post-content\"})",
             "BeautifulSoup(response, \"html.parser\").find_all(\"div\", {\"class\":\"featured\"})",
             "BeautifulSoup(response, \"html.parser\").find_all(\"div\", {\"class\":\"now\"})",

@@ -10,23 +10,24 @@ python3 scrap.py 7
 python3 scrap.py 8
 python3 scrap.py 9
 """
-import csv
-import datetime
 import hashlib
-import json
 import ast
-import pickle
-import re
-
-import requests
 from jsonmerge import merge
-import sys
-
-from store import store
-from openpyxl import Workbook
+import datetime
+import json
+import pickle
+import urllib
+import requests
+import csv
+import re
+import os
 from unidecode import unidecode
-
-
+from bs4 import BeautifulSoup
+from openpyxl import Workbook
+from nube import texto2els
+import sys
+from store import store
+id_grupo_telegram = ""
 def corresponde_procesar_id(k, terminacion_id):
     if k[-1] == terminacion_id:
         return True
@@ -101,11 +102,21 @@ def contarElementosLista(lista):
     Recibe una lista, y devuelve un diccionario con todas las repeticiones decada valor
     """
     return {i: lista.count(i) for i in lista}
-def save_persist(elem):
-    try:
-        vpath = "./persist"+nrogrupo+"/"
+#def save_persist(elem):
+    #try:
+        #vpath = "./persist"+nrogrupo+"/"
 
-        varchivo = vpath + elem + ".bin"
+        #varchivo = vpath + elem + ".bin"
+        #with open(varchivo, "bw") as archivo:
+            #pickle.dump(eval(elem), archivo)
+    #except Exception as e:
+
+        #print("Except de save_persist", e)
+def save_persist_dinamico(elem,id_grupo_telegram):
+    try:
+        vpath = "./persist/"
+
+        varchivo = vpath + elem + id_grupo_telegram+".bin"
         with open(varchivo, "bw") as archivo:
             pickle.dump(eval(elem), archivo)
     except Exception as e:
@@ -113,17 +124,14 @@ def save_persist(elem):
         print("Except de save_persist", e)
 def load_persist(elem):
     try:
-
-        vpath = "./persist"+nrogrupo+"/"
-        varchivo = vpath + elem + ".bin"
-
+        vpath = "./persist/"
+        varchivo = vpath + elem + id_grupo_telegram +".bin"
         with open(varchivo, "br") as archivo:
             # #print(pickle.load(archivo))
             return pickle.load(archivo)
-
     except Exception as e:
-
         print("269 - Except load_persit ", e)
+
 def replaceBase(texto):
     texto = texto.replace("http:", " ").replace("//", " ").replace(".", " ").replace("www", " ").replace(
             "https:", " ").replace("/", " ").replace("\n", " ").replace("-", " ")
@@ -157,7 +165,7 @@ def filtro_repetida(j_i):
         if not r:
             db_noticias2[dd] = 1
             print("\n ********* \n No encontrado: \n",dd,"\n",j_i['link'],"\n*************")
-            save_persist('db_noticias2')
+            save_persist_dinamico('db_noticias2',id_grupo_telegram)
         return r
 
 
@@ -222,7 +230,6 @@ class RSSParser(object):
         try:
             LINKS.write('----------LINK-----------' + '\n' + str(url) + '\n')
             for Noti in confiTagPage["j"]["BuscarNoticia"]:
-
                 try:
                     Noticias = eval(Noti)
                     fila += 1
@@ -230,7 +237,9 @@ class RSSParser(object):
                         LINKS.write('----------EVALUADOR-----------:' + '\n' + str(Noti) + '\n')
                         for i, Noticiae in enumerate(Noticias):
                             texto = filtroReplace(Noticiae.get_text())
-                            if filtro_tema2(texto, tema) and texto != '':
+                            print(texto)
+                            temas = ''.join(tema)
+                            if filtro_tema2(texto, temas) and texto != '':
                                 Noticia.append(Noticiae)
                                 LIIINKS = [a['href'] for a in Noticiae.find_all('a', href=True)]
                                 # LIIINKS = ', '+'\n'.join(LIIINKS)
@@ -238,11 +247,9 @@ class RSSParser(object):
                                 LINKS.write(
                                     '----------HTML-----------:' + '\n' + str(filtroReplace(Noticiae.text)) + '\n')
                                 LINKS.write('----------LINK-----------:' + '\n' + str(LIIINKS) + '\n')
-
                                 hoja.cell(row=i + 4, column=1).value = filtroReplace(filtroReplace(Noticiae.text))
                                 hoja.cell(row=i + 4, column=2).value = str(LIIINKS)
                                 hoja.cell(row=i + 4, column=3).value = str(Noti)
-
                 except Exception as e:
 
                     print("Error 2 - Obtener Articulos de noticias ", e)
@@ -259,7 +266,7 @@ class RSSParser(object):
 
                 hoja.cell(row=row, column=5).value = str(i)
                 texto = filtroReplace(i.get_text())
-                if filtro_tema2(texto, tema) and texto != '':
+                if filtro_tema2(texto, temas) and texto != '':
 
                     ListaDeLinks = eval(confiTagPage["j"]["path"])
                     if ListaDeLinks != "":
@@ -293,7 +300,7 @@ class RSSParser(object):
                                         texto)) + '\n')
                                 else:
                                     palabras = texto.split()
-                                    palabras.append(tema)
+                                    palabras.append(temas)
                                     try:
                                         for l in ListaDeLinks:
                                             linkCortado = replaceBase(l).split()
@@ -438,10 +445,7 @@ def link_enviado(l):
         print(" !!!!!!!!!!!!!!! ENCONTRO DUPLICADO !!!!!!!!!!!!!!!!!! ")
         return True
 def configuracion():
-
-
     f = open("configParametrosGenerico.json", "r")
-
     global j_config
     j_config = {}
     j_config = json.loads(f.read())
@@ -450,7 +454,6 @@ def configuracion():
     grupo_telegram_fijo = j_config["grupo_telegram_fijo"]
     global url_api_sonda
     url_api_sonda = j_config["url_api_sonda"]
-
     try:
         vtelegram = j_config["telegram"]
     except:
@@ -466,31 +469,28 @@ def configuracion():
     global directorio
     directorio = j_config["directorio"]
     try:
-
         global db_noticias2
         db_noticias2 = {}
-
-        #if os.path.isfile(directorio + 'persist'+nrogrupo+'/db_noticias2.bin'):
-            #db_noticias2 = load_persist("db_noticias2")
-        #else:
-            #db_noticias2 = {}
+        if os.path.isfile("./persist/db_noticias2"+id_grupo_telegram+".bin"):
+            db_noticias2 = load_persist("./persist/db_noticias2"+id_grupo_telegram)
+        else:
+            db_noticias2 = {}
     except:
         db_noticias2 = {}
-
     try:
         global LinksDePaginasWeb
         LinksDePaginasWeb = {}
-        #if os.path.isfile(directorio + 'persist/LinksDePaginasWeb.bin'):
-            #LinksDePaginasWeb = load_persist("LinksDePaginasWeb")
-        #else:
-            #LinksDePaginasWeb = {}
+        if os.path.isfile(directorio + 'persist/LinksDePaginasWeb.bin'):
+            LinksDePaginasWeb = load_persist("LinksDePaginasWeb")
+        else:
+            LinksDePaginasWeb = {}
     except:
         LinksDePaginasWeb = {}
 def enviar_noticias(idchat,NombreGrupo,provincias,Tema):
     if not vtelegram:
         pass
         # return
-    #filtro_repetida
+    filtro_repetida
 
     try:
         url_api = "bot1294708386:AAHCE0tRcq-hqT_b14UbHaArxs9q4XCj5fs" + "/sendMessage"
@@ -524,16 +524,19 @@ def enviar_noticias(idchat,NombreGrupo,provincias,Tema):
                     print(requests.status_codes)
     except Exception as e:
         print(" 279 - enviar ", e)
+
 def procesar_id(k):
     # obtengo el valor de la sonda para el k
     valor_sonda = datos_sonda[k]
     id_telegram = k
     nombre_grupo = valor_sonda[0]
+    global id_grupo_telegram
+    id_grupo_telegram = k
     tema = valor_sonda[1]
     provincias = valor_sonda[2]
     json_donde_estan_los_portales = formar_json_portales(provincias)
     j = open("./persist/configGenerico.json", "r")
-
+    configuracion()
     confiTagPage = {}
     confiTagPage = json.loads(j.read())
     for url in json_donde_estan_los_portales:
@@ -551,9 +554,7 @@ def procesar_id(k):
     
     """
 
-
 ### main ###
-
 ## supongamos que tenemos en memoria estos datos en la sonda
 datos_sonda = {
     "-123456789": ("sb_019_Presidente", ["termino1,termino2"], ["BsAs", "Catamarca"]),
@@ -562,8 +563,6 @@ datos_sonda = {
     "-123456783": ("sb_012_X", ["termino1,termino2"], ["Cordoba", "San_Luis"]),
     "-123456784": ("sb_014_Y", ["termino1,termino2"], ["Tierra_Del_Fuego", "La_Rioja"])
 }
-
-
 def verifico_cambios_en_la_sonda():
     # traigo los datos de las sonda
 
@@ -576,11 +575,12 @@ def verifico_cambios_en_la_sonda():
     # = requests.get(url, headers=headers).text
     datos_sonda_temp = requests.get(url, headers=headers)
     datos_sonda_temp = ast.literal_eval(datos_sonda_temp.content.decode('utf-8'))
+    datos_sonda_temp = {
+        "-474068207": ("sb_023_Jujuy", ["jujuy,bolsa"], ["Jujuy", "Chaco"])
+    }
     global datos_sonda
     if datos_sonda != datos_sonda_temp:
         datos_sonda = datos_sonda_temp
-
-
 if __name__ == '__main__':
 
     # tomo el primer parámetro que se le pasa al scrip cuando se ejecuta

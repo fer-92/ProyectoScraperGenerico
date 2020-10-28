@@ -125,7 +125,7 @@ def save_persist_dinamico(elem,id_grupo_telegram):
 def load_persist(elem):
     try:
         vpath = "./persist/"
-        varchivo = vpath + elem + id_grupo_telegram +".bin"
+        varchivo =  elem +".bin"
         with open(varchivo, "br") as archivo:
             # #print(pickle.load(archivo))
             return pickle.load(archivo)
@@ -333,6 +333,8 @@ class RSSParser(object):
                         """
                     if temp9[:1] == "/":
                         temp9 = temp9[1:]
+                    if temp9[:5] == "jujuy":
+                        temp9 = temp9.replace("jujuy","")
                     if temp9[:2] == "./":
                         temp9 = temp9[2:]
                     if temp9[:8] == "noticias":
@@ -412,7 +414,7 @@ class RSSParser(object):
                     medio = link2medio(link)
                     grupo = grupo_telegram_fijo
 
-                    store.store(titulo, fecha, texto, link, medio, grupo)
+                    #store.store(titulo, fecha, texto, link, medio, grupo)
 
                     #########################################################################
 
@@ -486,23 +488,23 @@ def configuracion():
             LinksDePaginasWeb = {}
     except:
         LinksDePaginasWeb = {}
-def enviar_noticias(idchat,NombreGrupo,provincias,Tema):
+def enviar_noticias(arr,id_chat,Nombre_Grupo,provincias,Temas):
     if not vtelegram:
         pass
         # return
     filtro_repetida
 
     try:
-        url_api = "bot1294708386:AAHCE0tRcq-hqT_b14UbHaArxs9q4XCj5fs" + "/sendMessage"
+        url_api = token + "/sendMessage"
 
         # print( "- tema \n", Tema, " \n ",  NombreGrupo )
-        men_t = "✔ Noticias referidas al tema %s, enviadas al grupo de télegram %s: " % (Tema, NombreGrupo) + "\n"
+        men_t = "✔ Noticias referidas al tema %s, enviadas al grupo de télegram %s: " % (Temas, Nombre_Grupo) + "\n"
         ta = False
         # recorro el arreglo de links y lo imprimos
         men = []
         # print("arr \n",  arr)
         # print( "men_t \n", men_t )
-        for a in provincias:
+        for a in arr:
             # print("3- ",a)
             # men += "- " + a + "\n\n"
 
@@ -513,14 +515,14 @@ def enviar_noticias(idchat,NombreGrupo,provincias,Tema):
                 ta = True
         if ta:
             # Si tiene información, mando el título.
-            requests.post('https://api.telegram.org/' + url_api, data={'chat_id': idchat, 'text': men_t})
+            requests.post('https://api.telegram.org/' + url_api, data={'chat_id': id_chat, 'text': men_t})
             for m in men:
 
                 # todo Eze, fijate que tuve que poner esta función par que controle no mandar repetidos.
                 if not link_enviado(m):
 
                     requests.post('https://api.telegram.org/' + url_api,
-                                  data={'chat_id': idchat, 'text': '\n [' + NombreGrupo + ']\n' + m})
+                                  data={'chat_id': id_chat, 'text': '\n [' + Nombre_Grupo + ']\n' + m})
                     print(requests.status_codes)
     except Exception as e:
         print(" 279 - enviar ", e)
@@ -548,7 +550,7 @@ def procesar_id(k):
             r = RSSParser().parse(confiTagPage, url, tema)
             PagNoticiaLink.save('./Excel/' + urlCortada + '-Noticias.xlsx')
             if r != []:
-                enviar_noticias(id_telegram,nombre_grupo,provincias,tema)
+                enviar_noticias(r,id_telegram,nombre_grupo,provincias,tema)
     """
     acá va el programa tal cual está en el main original ahora
     

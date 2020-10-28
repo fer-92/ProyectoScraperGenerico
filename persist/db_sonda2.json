@@ -1,0 +1,7 @@
+{
+  "-123456789": ["sb_019_Presidente", ["kicillof,larreta"], ["BsAs", "Catamarca"]],
+  "-123456781": ["sb_010_otro", ["termino1,termino2"],["La_Rioja", "Tierra_Del_Fuego"]],
+  "-123456782": ["sb_020_otro", ["termino1,termino2"], ["Chaco", "Formosa"]],
+  "-123456783": ["sb_012_X", ["termino1,termino2"], ["Cordoba", "Misiones"]],
+  "-123456784": ["sb_014_Y", ["termino1,termino2"], ["San_Luis", "Neuquen"]]
+}

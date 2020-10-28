@@ -1,0 +1,51 @@
+----------LINK-----------
+https://www.periodicosocial.com/----------HTML-----------:
+Actualidad Madrid amplía las ayudas al taxi para dar cobertura al 100 % de las solicitudes del sectorPor admin 3 octubre, 2020
+----------HTML-----------:
+Salud Información sobre el número de casos de coronavirus 3 octubre, 2020
+----------HTML-----------:
+Actualidad Madrid amplía las ayudas al taxi para dar cobertura al 100 % de las solicitudes del sector 3 octubre, 2020
+----------HTML-----------:
+Actualidad JAZZMADRID20 dedicará su edición a la escena nacional 3 octubre, 2020
+----------HTML-----------:
+El Ayuntamiento da luz verde a la construcción de una base de SAMUR-PC en el distrito de HortalezaPor admin 2 octubre, 2020Los trabajos correrán a cargo del Área de Obras y Equipamientos y cuentan con un presupuesto base de licitación de...
+----------HTML-----------:
+El Ayuntamiento lanza la campaña ‘Juntos, mucho por descubrir con las personas mayores’Por admin 2 octubre, 2020El Ayuntamiento lanza la campaña ‘Juntos, mucho por descubrir con las personas mayores’
+----------HTML-----------:
+La Empresa Municipal de Transporte comienza la formación de 60 nuevos conductores de autobúsPor admin 2 octubre, 2020Borja Carabante inaugura el curso en la empresa municipal
+----------HTML-----------:
+Discapacidad 188 personas con discapacidad han participado en el curso organizado por Plena Inclusión y UNEDPor Redacción 30 julio, 2020El curso de Ayudante de Gestión y Servicios Comunes, organizado por Plena inclusión y la UNED, ha tenido un total...
+----------HTML-----------:
+Discapacidad La campaña «Ponte a punto en la ortopedia» de FEDOP genera más de 150.000 impresiones en redesPor Redacción 2 agosto, 2020La FEDOP inició a principios de julio una campaña de concienciación en redes sociales con el objetivo de recordar a...
+----------HTML-----------:
+Plena inclusión y Fundación Vodafone se unen en el proyecto ‘Líderes digitales’ 23 julio, 2020
+----------HTML-----------:
+FEDOP pone en marcha la operación salida para pacientes de ortopedia 17 julio, 2020
+----------HTML-----------:
+Información sobre el número de casos de coronavirusPor Redacción 3 octubre, 2020La Consejería de Salud y Familias informa de que, actualmente, 998 pacientes confirmados con COVID-19 permanecen ingresados en los hospitales...
+----------HTML-----------:
+Madrid amplía las ayudas al taxi para dar cobertura al 100 % de las solicitudes del sectorPor admin 3 octubre, 2020El Plan de subvenciones Cambia 360 busca reducir el número de vehículos diésel en la flota de taxis de Madrid
+----------HTML-----------:
+JAZZMADRID20 dedicará su edición a la escena nacionalPor admin 3 octubre, 2020El Festival Internacional de Jazz de Madrid da a conocer sus fechas y las líneas principales de su programación
+----------HTML-----------:
+El Ayuntamiento da luz verde a la construcción de una base de SAMUR-PC en el distrito de HortalezaPor admin 2 octubre, 2020Los trabajos correrán a cargo del Área de Obras y Equipamientos y cuentan con un presupuesto base de licitación de...
+----------HTML-----------:
+Información sobre el número de casos de coronavirus 3 octubre, 2020
+----------HTML-----------:
+Madrid amplía las ayudas al taxi para dar cobertura al 100 % de las solicitudes del sector 3 octubre, 2020
+----------HTML-----------:
+JAZZMADRID20 dedicará su edición a la escena nacional 3 octubre, 2020
+----------HTML-----------:
+El Ayuntamiento da luz verde a la construcción de una base de SAMUR-PC en el distrito de Hortaleza 2 octubre, 2020
+----------LINK-----------
+https://www.periodicosocial.com/
+----------EVALUADOR-----------:
+BeautifulSoup(response, "html.parser").find_all("article")
+----------HTML-----------:
+Información sobre el número de casos de coronavirusPor Redacción 3 octubre, 2020La Consejería de Salud y Familias informa de que, actualmente, 998 pacientes confirmados con COVID-19 permanecen ingresados en los hospitales...
+----------LINK-----------:
+['https://www.periodicosocial.com/informacion-sobre-el-numero-de-casos-de-coronavirus/', 'https://www.periodicosocial.com/informacion-sobre-el-numero-de-casos-de-coronavirus/', 'https://www.periodicosocial.com/author/redaccion/', 'https://www.periodicosocial.com/informacion-sobre-el-numero-de-casos-de-coronavirus/']
+----------LINK-----------
+https://www.periodicosocial.com/informacion-sobre-el-numero-de-casos-de-coronavirus/
+----------HTML-----------:
+Informacion sobre el numero de casos de coronavirusPor Redaccion 3 octubre, 2020La Consejeria de Salud y Familias informa de que, actualmente, 998 pacientes confirmados con COVID-19 permanecen ingresados en los hospitales...

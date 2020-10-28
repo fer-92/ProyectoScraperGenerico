@@ -1,0 +1,10 @@
+----------LINK-----------
+http://www.actualidadsur.com/
+----------EVALUADOR-----------:
+BeautifulSoup(response, "html.parser").find_all("div", {"class": 'item-details'})
+----------HTML-----------:
+salud La Legislatura de Misiones creó un programa de salud visual y auditiva Vie., 09 de Oct. de 2020
+----------LINK-----------:
+['http://www.actualidadsur.com/salud', 'http://www.actualidadsur.com/salud/details/20889/La-Legislatura-de-Misiones-cre-un-programa-de-salud-visual-y-auditiva']
+http://www.actualidadsur.com/salud
+http://www.actualidadsur.com/salud/details/20889/La-Legislatura-de-Misiones-cre-un-programa-de-salud-visual-y-auditiva

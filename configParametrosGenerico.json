@@ -1,0 +1,15 @@
+{
+  "directorio": "C:/Users/eellena/PycharmProjects/EzequielScraper/",
+  "id_chat" : "-362387967" ,
+  "token" : "bot1294708386:AAHCE0tRcq-hqT_b14UbHaArxs9q4XCj5fs",
+  "NombreGrupo" : "Santiago_del_Estero",
+  "Tema": "Covid",
+  "id_chatGSF": "-470797606",
+  "NombreGrupoGSF" : "GSF",
+  "TemaGSF": "Ultima Noticia",
+  "grupo_telegram_fijo":"sb_sf_001",
+  "url_api_sonda_produ":"http://167.86.120.98:5000",
+  "url_api_sonda":"http://127.0.0.1:5002",
+  "telegram":false,
+  "palabra_nube":true
+}

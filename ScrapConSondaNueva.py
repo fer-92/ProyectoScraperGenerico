@@ -182,15 +182,24 @@ def filtro_tema(j_i, tema):
         r = False
     return r
 def filtro_tema2(texto, tema):
-    c1 = tema.upper() in texto.upper()
-    for j in tema.split(","):
+    # c1 = tema.upper() in texto.upper()
+    for j in tema:
         c2 = j.upper() in texto.upper()
-        c1 = c1 or c2
-    if c1:
+        #c1 = c1 or c2
+    if c2:
         r = True
     else:
         r = False
     return r
+
+    # for j in tema.split(","):
+    #    c2 = j.upper() in texto.upper()
+    #    c1 = c1 or c2
+    # if c1:
+    #    r = True
+    # else:
+    #    r = False
+    # return r
 def link2medio(link):
     r = ""
     try:
@@ -238,8 +247,7 @@ class RSSParser(object):
                         for i, Noticiae in enumerate(Noticias):
                             texto = filtroReplace(Noticiae.get_text())
                             print(texto)
-                            temas = ''.join(tema)
-                            if filtro_tema2(texto, temas) and texto != '':
+                            if filtro_tema2(texto, tema) and texto != '':
                                 Noticia.append(Noticiae)
                                 LIIINKS = [a['href'] for a in Noticiae.find_all('a', href=True)]
                                 # LIIINKS = ', '+'\n'.join(LIIINKS)
@@ -266,7 +274,7 @@ class RSSParser(object):
 
                 hoja.cell(row=row, column=5).value = str(i)
                 texto = filtroReplace(i.get_text())
-                if filtro_tema2(texto, temas) and texto != '':
+                if filtro_tema2(texto, tema) and texto != '':
 
                     ListaDeLinks = eval(confiTagPage["j"]["path"])
                     if ListaDeLinks != "":
@@ -300,7 +308,7 @@ class RSSParser(object):
                                         texto)) + '\n')
                                 else:
                                     palabras = texto.split()
-                                    palabras.append(temas)
+                                    palabras.append(tema)
                                     try:
                                         for l in ListaDeLinks:
                                             linkCortado = replaceBase(l).split()
@@ -576,14 +584,14 @@ def verifico_cambios_en_la_sonda():
     dict1 = {}
     # = requests.get(url, headers=headers).text
     datos_sonda_temp2 = requests.get(url2, headers=headers).json()
-    #datos_sonda_temp = requests.get(url, headers=headers)
-    #datos_sonda_temp = ast.literal_eval(datos_sonda_temp.content.decode('utf-8'))
+    datos_sonda_temp = requests.get(url, headers=headers)
+    datos_sonda_temp = ast.literal_eval(datos_sonda_temp.content.decode('utf-8'))
     #datos_sonda_temp = {
      #   "-474068207": ("sb_023_Jujuy", ["jujuy,bolsa"], ["Jujuy", "Chaco"])
     #}
     global datos_sonda
-    if datos_sonda != datos_sonda_temp2["result"]:
-        datos_sonda = datos_sonda_temp2["result"]
+    if datos_sonda != datos_sonda_temp:
+        datos_sonda = datos_sonda_temp
 if __name__ == '__main__':
 
     # tomo el primer parámetro que se le pasa al scrip cuando se ejecuta

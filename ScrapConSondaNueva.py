@@ -543,9 +543,9 @@ def procesar_id(k):
             # print( "********************************" )
             print(" Procesando la url:  ", url)
             r = RSSParser().parse(confiTagPage, url, tema)
-            #PagNoticiaLink.save('./Excel/' + urlCortada + '-Noticias.xlsx')
-            #if r != []:
-            enviar_noticias(id_telegram,nombre_grupo,provincias,tema)
+            PagNoticiaLink.save('./Excel/' + urlCortada + '-Noticias.xlsx')
+            if r != []:
+                enviar_noticias(id_telegram,nombre_grupo,provincias,tema)
     """
     acá va el programa tal cual está en el main original ahora
     

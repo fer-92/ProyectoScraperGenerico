@@ -22,6 +22,7 @@
             "BeautifulSoup(response, \"html.parser\").find_all(\"div\", {\"id\": 'postbox'})",
             "BeautifulSoup(response, \"html.parser\").find_all(\"div\", {\"class\": 'post-item'})",
             "BeautifulSoup(response, \"html.parser\").find_all(\"div\", {\"class\": 'news-summary'})",
+            "BeautifulSoup(response, \"html.parser\").find_all(\"div\", {\"class\": 'penci_media_object'})",
             "BeautifulSoup(response, \"html.parser\").find_all(\"div\", {\"class\": 'caption'})",
             "BeautifulSoup(response, \"html.parser\").find_all(\"div\", {\"class\": 'vc_grid-item-mini'})",
             "BeautifulSoup(response, \"html.parser\").find_all(\"div\", {\"class\": 'post-body'})",
@@ -91,6 +92,7 @@
             "BeautifulSoup(response, \"html.parser\").find_all(\"div\", {\"class\":\"recent-content\"})",
             "BeautifulSoup(response, \"html.parser\").find_all(\"div\", {\"class\":\"td-item-details\"})",
             "BeautifulSoup(response, \"html.parser\").find_all(\"div\", {\"class\":\"nota\"})",
+            "BeautifulSoup(response, \"html.parser\").find_all(\"div\", {\"class\":\"nota_gen\"})",
             "BeautifulSoup(response, \"html.parser\").find_all(\"div\", {\"class\":\"news_box_home\"})",
             "BeautifulSoup(response, \"html.parser\").find_all(\"h3\", {\"class\":\"post-title\"})",
             "BeautifulSoup(response, \"html.parser\").find_all(\"div\", {\"class\":\"post-outer\"})",
@@ -98,8 +100,22 @@
             "BeautifulSoup(response, \"html.parser\").find_all(\"span \", {\"class\":\"xpose_title\"})",
             "BeautifulSoup(response, \"html.parser\").find_all(\"div\", {\"class\":\"col-xl-4\"})",
             "BeautifulSoup(response, \"html.parser\").find_all(\"div\", {\"class\":\"position-relative\"})",
+            "BeautifulSoup(response, \"html.parser\").find_all(\"div\", {\"class\":\"slide-content\"})",
+            "BeautifulSoup(response, \"html.parser\").find_all(\"div\", {\"class\":\"slide\"})",
             "BeautifulSoup(response, \"html.parser\").find_all(\"div\", {\"class\":\"blog_featured_post\"})",
+            "BeautifulSoup(response, \"html.parser\").find_all(\"div\", {\"class\":\"new-post\"})",
+            "BeautifulSoup(response, \"html.parser\").find_all(\"div\", {\"class\":\"vn-post-item\"})",
+            "BeautifulSoup(response, \"html.parser\").find_all(\"div\", {\"class\":\"feature-text\"})",
+            "BeautifulSoup(response, \"html.parser\").find_all(\"div\", {\"class\":\"penci_post_content\"})",
+            "BeautifulSoup(response, \"html.parser\").find_all(\"div\", {\"class\":\"zox-art-grid\"})",
+            "BeautifulSoup(response, \"html.parser\").find_all(\"div\", {\"class\":\"item-noticia\"})",
+            "BeautifulSoup(response, \"html.parser\").find_all(\"div\", {\"class\":\"post-box-title\"})",
+            "BeautifulSoup(response, \"html.parser\").find_all(\"div\", {\"id\":\"noticia_principal\"})",
+
+
             "BeautifulSoup(response, \"html.parser\").find_all(\"div\", {\"class\":['shad', 'item', 'item-0', 'item-two', 'item-three', 'item-four']})"
+
+
         ],
         "path": "[a['href'] for a in i.find_all('a', href=True)]",
         "tituloNoticia": [

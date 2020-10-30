@@ -47,6 +47,7 @@ def corresponde_procesar_id(k, terminacion_id):
         True or False
     """
 def carga_portales(provincia):
+    provincia = provincia.replace(" ","_")
     f = open("./LinksDeLasProvincias/"+provincia+".json", "r")
     ff = json.loads(f.read())
     return ff
@@ -183,10 +184,12 @@ def filtro_tema(j_i, tema):
     return r
 def filtro_tema2(texto, tema):
     # c1 = tema.upper() in texto.upper()
+    r = False
     for j in tema:
-        c2 = j.upper() in texto.upper()
+        if j.upper() in texto.upper():
+            r = True
         #c1 = c1 or c2
-    if c2:
+    if r:
         r = True
     else:
         r = False
@@ -545,7 +548,7 @@ def procesar_id(k):
     tema = valor_sonda[1]
     provincias = valor_sonda[2]
     json_donde_estan_los_portales = formar_json_portales(provincias)
-    j = open("./persist/configGenerico.json", "r")
+    j = open("./configGenerico.json", "r")
     configuracion()
     confiTagPage = {}
     confiTagPage = json.loads(j.read())

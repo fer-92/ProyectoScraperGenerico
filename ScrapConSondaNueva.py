@@ -68,31 +68,7 @@ mugre = ["xmlns=http://www.w3.org/1999/>", "<\n", "\n>", "<<p>", "<p>", "</p", "
          "xmlns=http://www.w3.org/1999/>", "<br />", "CDATA", "</div>>", "<div>", "</div>", "%>", "<iframe>",
          "</iframe>", "100%", "<div", "http://w3.org/", "xmlms", "xhtml", ";>", "<", ">", "'", '"', "\/", "]", "[",
          "/","-","ttp",":","swww"]
-def configuracionExcels(url):
-    global PagNoticiaLink
-    PagNoticiaLink = Workbook()
-    global hoja
-    hoja = PagNoticiaLink.active
-    hoja['A1'] = "URL"
-    hoja['A2'] = url
-    hoja['A3'] = "TEXTO OBTENIDO"
-    hoja['B3'] = "LINKS DE LAS NOTICIAS"
-    hoja['C3'] = "TAG CON EL QUE ENCONTRO LAS NOTICIAS"
-    hoja['D3'] = "TODOS LOS LINKS DE LA NOTICIA"
-    hoja['E3'] = "HTML"
-    hoja['F3'] = "TITULO NOTICIA"
-    hoja['G3'] = "DESCRIPCION NOTICIA"
-    hoja['H3'] = "FECHA PUBLICACION NOTICIA"
-    hoja['I3'] = "FECHA MODIFICACION NOTICIA"
-    hoja['J3'] = "ERRORES"
-    hoja['K3'] = "ERRORES"
-    hoja['L3'] = "ERRORES"
-    hoja['M3'] = "ERRORES"
-    hoja['N3'] = "ERRORES"
-    hoja['O3'] = "ERRORES"
-    hoja['P3'] = "ERRORES"
-    hoja['Q3'] = "ERRORES"
-    return PagNoticiaLink, hoja
+
 def log(texto):
     l = open("log.csv", "a")
     l.write(texto + "\n")
@@ -230,7 +206,6 @@ class RSSParser(object):
             urlCortada = replaceURL(url)
         LINKS = open("./LINKS/" + urlCortada + ".csv", "a", encoding='utf-8')
 
-        configuracionExcels(url)
         try:
             headers = {
                 'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.12; rv:55.0) Gecko/20100101 Firefox/55.0',
@@ -258,24 +233,18 @@ class RSSParser(object):
                                 LINKS.write(
                                     '----------HTML-----------:' + '\n' + str(filtroReplace(Noticiae.text)) + '\n')
                                 LINKS.write('----------LINK-----------:' + '\n' + str(LIIINKS) + '\n')
-                                hoja.cell(row=i + 4, column=1).value = filtroReplace(filtroReplace(Noticiae.text))
-                                hoja.cell(row=i + 4, column=2).value = str(LIIINKS)
-                                hoja.cell(row=i + 4, column=3).value = str(Noti)
                 except Exception as e:
 
                     print("Error 2 - Obtener Articulos de noticias ", e)
 
-            PagNoticiaLink.save('./Excel/' + urlCortada + '-Noticias.xlsx')
         except Exception as e:
             print("Error 3 - Obtener Articulos de noticias ", e)
         temp9 = ""
         row = 3
-        PagNoticiaLink.save('./Excel/' + urlCortada + '-Noticias.xlsx')
         try:
             for i in Noticia:
                 row += 1
 
-                hoja.cell(row=row, column=5).value = str(i)
                 texto = filtroReplace(i.get_text())
                 if filtro_tema2(texto, tema) and texto != '':
 
@@ -291,13 +260,9 @@ class RSSParser(object):
 
                         except Exception as e:
                             print(" 4 - Obtener Resultado maximo de links ", e)
-                            hoja.cell(row=fila + 4, column=12).value = str(e)
-                            hoja.cell(row=fila + 4, column=13).value = str(resultado)
-                            hoja.cell(row=fila + 4, column=14).value = str(maximo)
                         if len(SetDeLinks) == 1 and list(SetDeLinks)[0] != url:
                             temp9 = list(SetDeLinks)
                             temp9 = str(temp9[0])
-                            hoja.cell(row=row, column=2).value = temp9
                             LINKS.write('----------LINK-----------' + '\n' + str(
                                 unidecode(temp9)) + '\n' + '----------HTML-----------:' + '\n' + unidecode(
                                 str(texto)) + '\n')
@@ -305,7 +270,6 @@ class RSSParser(object):
                             if resultado != {}:
                                 if resultado[maximo] >= 2:
                                     temp9 = maximo
-                                    hoja.cell(row=row, column=2).value = temp9
                                     LINKS.write('----------LINK-----------' + '\n' + str(unidecode(
                                         temp9)) + '\n' + '----------HTML-----------:' + '\n' + unidecode(str(
                                         texto)) + '\n')
@@ -325,8 +289,6 @@ class RSSParser(object):
                                                     LINKS.write(unidecode(temp9) + '\n')
 
                                     except Exception as e:
-                                        hoja.cell(row=fila + 4, column=15).value = str(e.args)
-                                        hoja.cell(row=fila + 4, column=16).value = str(i)
                                         print(" ERROR 5 - NO ESCRAPEO NADA ", e)
                                         print(" ********* URL no parseada correctamente: \n", url, "\n")
                                         print(i)
@@ -374,8 +336,7 @@ class RSSParser(object):
                                     if Titulos != []:
                                         Titulo.append(Titulos)
                                 except Exception as e:
-                                    # print(" Obtener Titulo", e,Titu)
-                                    hoja.cell(row=row, column=17).value = str(e)
+                                    print(e)
                             resultadoTitulo = contarElementosLista(Titulo)
                             if resultadoTitulo != {}:
                                 maximoTitulo = max(resultadoTitulo, key=resultadoTitulo.get)
@@ -390,8 +351,7 @@ class RSSParser(object):
                                     if Descripciones != []:
                                         Descripcion.append(Descripciones)
                                 except Exception as e:
-                                    # print(" Obtener Titulo", e,Descr)
-                                    hoja.cell(row=row, column=18).value = str(e)
+                                    print(e)
                             resultadoDescripcion = contarElementosLista(Descripcion)
                             if resultadoDescripcion != {}:
                                 maximoDescripcion = max(resultadoDescripcion, key=resultadoDescripcion.get)
@@ -425,17 +385,15 @@ class RSSParser(object):
                     medio = link2medio(link)
                     grupo = grupo_telegram_fijo
 
-                    #store.store(titulo, fecha, texto, link, medio, grupo)
+                    store.store(titulo, fecha, texto, link, medio, grupo)
 
                     #########################################################################
 
             LINKS.close()
-            PagNoticiaLink.save('./Excel/' + urlCortada + '-Noticias.xlsx')
             # hojaExcelDeErrores.save('./Excel/errores' + urlCortada + '-Errores.xlsx')
             return items
         except Exception as e:
             print(" 100 - Obtener links ", e)
-            hoja.cell(row=row, column=10).value = str(e)
 def limpiar(texto, mugre):
     for m in mugre:
         texto = texto.replace(m, "")
@@ -559,7 +517,6 @@ def procesar_id(k):
             # print( "********************************" )
             print(" Procesando la url:  ", url)
             r = RSSParser().parse(confiTagPage, url, tema)
-            PagNoticiaLink.save('./Excel/' + urlCortada + '-Noticias.xlsx')
             if r != []:
                 enviar_noticias(r,id_telegram,nombre_grupo,provincias,tema)
     """
@@ -567,15 +524,7 @@ def procesar_id(k):
     
     """
 
-### main ###
-## supongamos que tenemos en memoria estos datos en la sonda
-datos_sonda = {
-    "-123456789": ("sb_019_Presidente", ["termino1,termino2"], ["BsAs", "Catamarca"]),
-    "-123456781": ("sb_010_otro", ["termino1,termino2"], ["Neuquen", "Mendoza"]),
-    "-123456782": ("sb_020_otro", ["termino1,termino2"], ["Cordoba", "Catamarca"]),
-    "-123456783": ("sb_012_X", ["termino1,termino2"], ["Cordoba", "San_Luis"]),
-    "-123456784": ("sb_014_Y", ["termino1,termino2"], ["Tierra_Del_Fuego", "La_Rioja"])
-}
+datos_sonda ={}
 def verifico_cambios_en_la_sonda():
     # traigo los datos de las sonda
 
@@ -607,6 +556,5 @@ if __name__ == '__main__':
         verifico_cambios_en_la_sonda()
 
         for k in datos_sonda:
-
             if corresponde_procesar_id(k, terminacion_id):
                 procesar_id(k)

@@ -41,7 +41,7 @@ def actualizar_tema(grupo_telegram, tema_anterior):
 
 
         # me conecto a la API de Sonda para ver que tema tiene asignado cada grupo
-        url = url_api_sonda + "/sb_get_tema/?grupo="+grupo_telegram
+        url = "http://167.86.120.98:5002/sb_get_tema/?grupo="+grupo_telegram
         r = requests.get(url).text
 
         if tema_anterior != ",".join(eval(r)):
@@ -116,31 +116,7 @@ def contarElementosLista(lista):
     Recibe una lista, y devuelve un diccionario con todas las repeticiones decada valor
     """
     return {i:lista.count(i) for i in lista}
-def configuracionExcels(url):
-    global PagNoticiaLink
-    PagNoticiaLink = Workbook()
-    global hoja
-    hoja = PagNoticiaLink.active
-    hoja['A1'] = "URL"
-    hoja['A2'] = url
-    hoja['A3'] = "TEXTO OBTENIDO"
-    hoja['B3'] = "LINKS DE LAS NOTICIAS"
-    hoja['C3'] = "TAG CON EL QUE ENCONTRO LAS NOTICIAS"
-    hoja['D3'] = "TODOS LOS LINKS DE LA NOTICIA"
-    hoja['E3'] = "HTML"
-    hoja['F3'] = "TITULO NOTICIA"
-    hoja['G3'] = "DESCRIPCION NOTICIA"
-    hoja['H3'] = "FECHA PUBLICACION NOTICIA"
-    hoja['I3'] = "FECHA MODIFICACION NOTICIA"
-    hoja['J3'] = "ERRORES"
-    hoja['K3'] = "ERRORES"
-    hoja['L3'] = "ERRORES"
-    hoja['M3'] = "ERRORES"
-    hoja['N3'] = "ERRORES"
-    hoja['O3'] = "ERRORES"
-    hoja['P3'] = "ERRORES"
-    hoja['Q3'] = "ERRORES"
-    return PagNoticiaLink, hoja
+
 class RSSParser(object):
 
     def parse(self,confiTagPage, urlytag, tema):
@@ -157,7 +133,6 @@ class RSSParser(object):
             urlCortada= replaceURL(urlytag)
         LINKS = open("./LINKS/" + urlCortada + ".csv", "a", encoding='utf-8')
 
-        configuracionExcels(url)
         try:
             headers = {
                 'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.12; rv:55.0) Gecko/20100101 Firefox/55.0',
@@ -186,26 +161,20 @@ class RSSParser(object):
                                     '----------HTML-----------:' + '\n' + str(filtroReplace(Noticiae.text)) + '\n')
                                 LINKS.write('----------LINK-----------:' + '\n' + str(LIIINKS) + '\n')
 
-                                hoja.cell(row=i + 4, column=1).value = filtroReplace(filtroReplace(Noticiae.text))
-                                hoja.cell(row=i + 4, column=2).value = str(LIIINKS)
-                                hoja.cell(row=i + 4, column=3).value = str(Noti)
                                                                                                                       
                 except Exception as e:
                                                                           
                                                                                            
                     print("Error 2 - Obtener Articulos de noticias ", e)
 
-            PagNoticiaLink.save('./Excel/' + urlCortada + '-Noticias.xlsx')
         except Exception as e:
             print("Error 3 - Obtener Articulos de noticias ", e)
         temp9 = ""
         row = 3
-        PagNoticiaLink.save('./Excel/' + urlCortada + '-Noticias.xlsx')
         try:
             for i in Noticia:
                 row +=1
 
-                hoja.cell(row=row, column=5).value = str(i)
                 texto = filtroReplace(i.get_text())
                 if filtro_tema2(texto, tema) and texto != '':
 
@@ -221,19 +190,14 @@ class RSSParser(object):
 
                         except Exception as e:
                             print(" 4 - Obtener Resultado maximo de links ", e)
-                            hoja.cell(row=fila + 4, column=12).value = str(e)
-                            hoja.cell(row=fila + 4, column=13).value = str(resultado)
-                            hoja.cell(row=fila + 4, column=14).value = str(maximo)
                         if len(SetDeLinks) == 1 and list(SetDeLinks)[0] != urlytag:
                             temp9 = list(SetDeLinks)
                             temp9 = str(temp9[0])
-                            hoja.cell(row=row, column=2).value = temp9
                             LINKS.write('----------LINK-----------'+'\n'+ str(unidecode(temp9))+'\n'+  '----------HTML-----------:' +'\n'+ unidecode(str(texto)) +  '\n')
                         else:
                             if resultado != {}:
                                 if resultado[maximo] >= 2:
                                     temp9 = maximo
-                                    hoja.cell(row=row, column=2).value = temp9
                                     LINKS.write('----------LINK-----------' + '\n' + str(unidecode(
                                         temp9)) + '\n' + '----------HTML-----------:' + '\n' + unidecode(str(
                                         texto)) + '\n')
@@ -251,8 +215,6 @@ class RSSParser(object):
                                                     LINKS.write(unidecode(temp9) + '\n')
 
                                     except Exception as e:
-                                        hoja.cell(row=fila + 4, column=15).value = str(e.args)
-                                        hoja.cell(row=fila + 4, column=16).value = str(i)
                                         print(" ERROR 5 - NO ESCRAPEO NADA ", e)
                                         print(" ********* URL no parseada correctamente: \n", url, "\n")
                                         print(i)
@@ -286,50 +248,50 @@ class RSSParser(object):
                            "tmpItems": i}
                     try:
                         if not filtro_repetida(j_i):
-                            archivoCSV = []
+                            #archivoCSV = []
                             LinkNotcia = j_i["link"]
-                            DescripcionNoticia = ""
-                            fechaPublicacion = ""
-                            response2 = requests.get(LinkNotcia, headers=headers).text
-                            Titulo = []
-                            for Titu in confiTagPage["j"]["tituloNoticia"]:
-                                try:
-                                    Titulos = eval(Titu)
-                                    if Titulos != []:
-                                        Titulo.append(Titulos)
-                                except Exception as e:
-                                    #print(" Obtener Titulo", e,Titu)
-                                    hoja.cell(row=row, column=17).value = str(e)
-                            resultadoTitulo = contarElementosLista(Titulo)
-                            if resultadoTitulo != {}:
-                                maximoTitulo = max(resultadoTitulo, key=resultadoTitulo.get)
-                                #hoja.cell(row=row, column=6).value = maximoTitulo
-                                print("El valor mas repetido es el ", maximoTitulo, " con ", resultadoTitulo[maximoTitulo], " veces")
+                            #DescripcionNoticia = ""
+                            #fechaPublicacion = ""
+                            #response2 = requests.get(LinkNotcia, headers=headers).text
 
-                            Descripcion = []
-                            for Descr in confiTagPage["j"]["descripcionNoticia"]:
-                                try:
-                                    Descripciones = eval(Descr)
-                                    if Descripciones != []:
-                                        Descripcion.append(Descripciones)
-                                except Exception as e:
-                                    #print(" Obtener Titulo", e,Descr)
-                                    hoja.cell(row=row, column=18).value = str(e)
-                            resultadoDescripcion = contarElementosLista(Descripcion)
-                            if resultadoDescripcion != {}:
-                                maximoDescripcion = max(resultadoDescripcion, key=resultadoDescripcion.get)
-                                #hoja.cell(row=row, column=7).value = maximoDescripcion
-                                print("El valor mas repetido es el ", maximoDescripcion, " con ", resultadoDescripcion[maximoDescripcion], " veces")
+                            """ 
+                                                       Titulo = []
+                                                        for Titu in confiTagPage["j"]["tituloNoticia"]:
+                                                            try:
+                                                                Titulos = eval(Titu)
+                                                                if Titulos != []:
+                                                                    Titulo.append(Titulos)
+                                                            except Exception as e:
+                                                                print(" Obtener Titulo", e,Titu)
+                                                        resultadoTitulo = contarElementosLista(Titulo)
+                                                        if resultadoTitulo != {}:
+                                                            maximoTitulo = max(resultadoTitulo, key=resultadoTitulo.get)
+                                                            print("El valor mas repetido es el ", maximoTitulo, " con ", resultadoTitulo[maximoTitulo], " veces")
 
-                            link_web = url
-                            FechaHoraScrapeo = str(datetime.datetime.now())
-                            archivoCSV.append(link_web + ',\n' + ',\n' + LinkNotcia + ',\n' + FechaHoraScrapeo)
+                                                        Descripcion = []
+                                                        for Descr in confiTagPage["j"]["descripcionNoticia"]:
+                                                            try:
+                                                                Descripciones = eval(Descr)
+                                                                if Descripciones != []:
+                                                                    Descripcion.append(Descripciones)
+                                                            except Exception as e:
+                                                                print(" Obtener Titulo", e,Descr)
+                                                        resultadoDescripcion = contarElementosLista(Descripcion)
+                                                        if resultadoDescripcion != {}:
+                                                            maximoDescripcion = max(resultadoDescripcion, key=resultadoDescripcion.get)
+                                                            #hoja.cell(row=row, column=7).value = maximoDescripcion
+                                                            print("El valor mas repetido es el ", maximoDescripcion, " con ", resultadoDescripcion[maximoDescripcion], " veces")
+
+                                                        link_web = url
+                                                        FechaHoraScrapeo = str(datetime.datetime.now())
+                                                        archivoCSV.append(link_web + ',\n' + ',\n' + LinkNotcia + ',\n' + FechaHoraScrapeo)
 
 
-                            with open("out.csv", "a") as f:
-                                wr = csv.writer(f, delimiter="\n")
-                                for ele in items:
-                                    wr.writerow([ele + ","])
+                                                        with open("out.csv", "a") as f:
+                                                            wr = csv.writer(f, delimiter="\n")
+                                                            for ele in items:
+                                                                wr.writerow([ele + ","])
+                                                        """
                     except Exception as e:
                         print( " ERROR AL OBTENER TITULO O DESCRIPCION", e )
 
@@ -340,27 +302,25 @@ class RSSParser(object):
                     link = LinkNotcia
 
                     # resto 5 horas porque es la diferencia horario que tengo con Alemania
-                    aive_dt = datetime.datetime.now() - - datetime.timedelta( hours=5)
-                    fecha = aive_dt.strftime( "%Y-%m-%dT%H:%M:%SZ" )
+                    #aive_dt = datetime.datetime.now() - - datetime.timedelta( hours=5)
+                    #fecha = aive_dt.strftime( "%Y-%m-%dT%H:%M:%SZ" )
 
 
-                    titulo = maximoTitulo
+                    #titulo = maximoTitulo
                     # stract portal media from notice's link
-                    medio = link2medio(link)
-                    grupo = grupo_telegram_fijo
+                    #medio = link2medio(link)
+                    #grupo = grupo_telegram_fijo
 
-                    store.store( titulo, fecha, texto, link, medio, grupo )
+                    #store.store( titulo, fecha, texto, link, medio, grupo )
 
                     #########################################################################
 
 
             LINKS.close()
-            PagNoticiaLink.save('./Excel/' + urlCortada + '-Noticias.xlsx')
             #hojaExcelDeErrores.save('./Excel/errores' + urlCortada + '-Errores.xlsx')
             return items
         except Exception as e:
             print(" 100 - Obtener links ", e)
-            hoja.cell(row=row, column=10).value = str(e)
 def filtroReplace(object):
     object.replace("/", "").replace(":", "").replace("%", "").replace("-", "").replace("[", "").replace("]","").replace("<","").replace(">", "").replace("!", "").replace(",", "")
     return " ".join(object.split())
@@ -523,7 +483,7 @@ if __name__ == "__main__":
 
     path = "./persist"+nrogrupo+"/"
 
-    j = open(path+"configGenerico.json", "r")
+    j = open("configGenerico2.json", "r")
 
     confiTagPage = {}
     confiTagPage = json.loads(j.read())
@@ -581,7 +541,6 @@ if __name__ == "__main__":
                     ##########################################################33
                     print(" Procesando la url:  ", url)
                     r = RSSParser().parse(confiTagPage, url, Tema)
-                    PagNoticiaLink.save('./Excel/' + urlCortada + '-Noticias.xlsx')
                     if r != []:
                         enviar_noticias(r)
         except Exception as e:
